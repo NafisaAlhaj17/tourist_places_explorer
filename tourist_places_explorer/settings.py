@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'places',
     'users',
     'contact',
+    'core',
 ]
 
 MIDDLEWARE = [
