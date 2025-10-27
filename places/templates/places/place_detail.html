@@ -48,6 +48,17 @@
             <i class="bi bi-info-square"></i> Quick Info
           </h5>
         </div>
+        {% if average_rating > 0 %}
+        <div class="card-body border-bottom">
+          <div class="rating-display">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <strong><i class="bi bi-star-fill text-warning"></i> Rating</strong>
+              <span class="badge bg-success">{{ average_rating }}/5.0</span>
+            </div>
+            <small class="text-muted">{{ rating_count }} review{{ rating_count|pluralize }}</small>
+          </div>
+        </div>
+        {% endif %}
         <div class="card-body">
           <div class="info-item mb-3">
             <div class="d-flex align-items-center mb-2">
@@ -81,6 +92,108 @@
           </a>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Section -->
+<div class="container my-5">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white">
+          <h4 class="mb-0">
+            <i class="bi bi-star"></i> Share Your Experience
+          </h4>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="{{ feedback_form.name.id_for_label }}" class="form-label">
+                <i class="bi bi-person"></i> {{ feedback_form.name.label }}
+              </label>
+              {{ feedback_form.name }}
+              {% if feedback_form.name.errors %}
+                <div class="text-danger small">{{ feedback_form.name.errors }}</div>
+              {% endif %}
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ feedback_form.email.id_for_label }}" class="form-label">
+                <i class="bi bi-envelope"></i> {{ feedback_form.email.label }}
+              </label>
+              {{ feedback_form.email }}
+              {% if feedback_form.email.errors %}
+                <div class="text-danger small">{{ feedback_form.email.errors }}</div>
+              {% endif %}
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">
+                <i class="bi bi-star-fill"></i> {{ feedback_form.rating.label }}
+              </label>
+              <div class="rating-options">
+                {{ feedback_form.rating }}
+              </div>
+              {% if feedback_form.rating.errors %}
+                <div class="text-danger small">{{ feedback_form.rating.errors }}</div>
+              {% endif %}
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ feedback_form.comment.id_for_label }}" class="form-label">
+                <i class="bi bi-chat-text"></i> {{ feedback_form.comment.label }}
+              </label>
+              {{ feedback_form.comment }}
+              {% if feedback_form.comment.errors %}
+                <div class="text-danger small">{{ feedback_form.comment.errors }}</div>
+              {% endif %}
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="bi bi-send"></i> Submit Feedback
+            </button>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Display Feedbacks -->
+      {% if feedbacks %}
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white">
+          <h4 class="mb-0">
+            <i class="bi bi-chat-heart"></i> Visitor Reviews 
+            <span class="badge bg-primary">{{ rating_count }}</span>
+          </h4>
+        </div>
+        <div class="card-body">
+          {% for feedback in feedbacks %}
+          <div class="feedback-item mb-4 pb-4 border-bottom">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <h6 class="mb-1">
+                  <i class="bi bi-person-circle"></i> {{ feedback.name }}
+                </h6>
+                <small class="text-muted">{{ feedback.created_at|date:"F j, Y" }}</small>
+              </div>
+              <div class="rating-stars">
+                {{ feedback.get_stars }}
+              </div>
+            </div>
+            <p class="mb-0 text-muted">{{ feedback.comment }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <div class="card shadow-sm border-0">
+        <div class="card-body text-center text-muted">
+          <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+          <p class="mb-0 mt-2">No reviews yet. Be the first to review this place!</p>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -151,6 +264,36 @@
   .display-4 {
     font-size: 2rem;
   }
+}
+
+.rating-options ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rating-options li {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.rating-options li:hover {
+  background-color: #f8f9fa;
+}
+
+.rating-options input[type="radio"] {
+  margin-right: 0.5rem;
+}
+
+.rating-stars {
+  font-size: 1.2rem;
+  color: #ffc107;
+}
+
+.feedback-item:last-child {
+  border-bottom: none !important;
 }
 </style>
 
