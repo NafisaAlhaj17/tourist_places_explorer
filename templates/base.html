@@ -1,0 +1,124 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Tourist Places Explorer{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  <style>
+    body {
+      padding-top: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    }
+    
+    .navbar-brand {
+      font-size: 1.5rem;
+    }
+    
+    .nav-link {
+      transition: color 0.3s;
+    }
+    
+    .nav-link:hover {
+      color: #fff !important;
+      transform: translateY(-2px);
+    }
+    
+    main {
+      min-height: calc(100vh - 200px);
+    }
+    
+    footer {
+      background: #2d3436;
+      color: white;
+      padding: 2rem 0;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{% url 'places:place_list' %}">
+      <i class="bi bi-globe"></i> TouristPlaces
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'places:place_list' %}">
+              <i class="bi bi-house"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="bi bi-person-circle"></i> {{ user.username }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:logout' %}">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'places:place_list' %}">
+              <i class="bi bi-house"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:login' %}">
+              <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-light ms-2 px-3" href="{% url 'users:signup' %}">
+              <i class="bi bi-person-plus"></i> Sign Up
+            </a>
+          </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'contact:contact' %}">
+            <i class="bi bi-envelope"></i> Contact
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="bg-dark text-white text-center">
+  <div class="container py-4">
+    <div class="row">
+      <div class="col-md-6 text-md-start">
+        <h5><i class="bi bi-globe"></i> TouristPlaces</h5>
+        <p class="text-muted">Explore amazing destinations around the world</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <p class="mb-1">
+          <a href="{% url 'places:place_list' %}" class="text-white text-decoration-none">Home</a> |
+          <a href="{% url 'contact:contact' %}" class="text-white text-decoration-none">Contact</a>
+        </p>
+        <p class="text-muted mb-0">&copy; 2025 TouristPlaces. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

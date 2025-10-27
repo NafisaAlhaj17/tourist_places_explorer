@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% block title %}Tourist Places{% endblock %}
+{% block content %}
+{% load static %}
+
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="container text-center py-5">
+    <h1 class="hero-title">🌍 Explore Amazing Places</h1>
+    <p class="hero-subtitle">Discover beautiful destinations around the world</p>
+  </div>
+</div>
+
+<div class="container my-5">
+  <!-- Search Section -->
+  <div class="search-section mb-5">
+    <form method="get" class="search-form">
+      <div class="row g-3">
+        <div class="col-lg-4 col-md-6">
+          <div class="form-floating">
+            <input type="text" name="q" class="form-control form-control-lg" id="searchInput" placeholder="Search places..." value="{{ request.GET.q }}">
+            <label for="searchInput"><i class="bi bi-search"></i> Search places...</label>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="form-floating">
+            <input type="text" name="city" class="form-control form-control-lg" id="cityInput" placeholder="City" value="{{ request.GET.city }}">
+            <label for="cityInput"><i class="bi bi-geo-alt"></i> City</label>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="form-floating">
+            <select name="category" class="form-select form-select-lg" id="categorySelect">
+              <option value="">All Categories</option>
+              {% for cat in categories %}
+                <option value="{{ cat.name }}" {% if request.GET.category == cat.name %}selected{% endif %}>{{ cat.name }}</option>
+              {% endfor %}
+            </select>
+            <label for="categorySelect"><i class="bi bi-bookmark"></i> Category</label>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6">
+          <button type="submit" class="btn btn-primary btn-lg w-100 h-100">
+            <i class="bi bi-funnel"></i> Filter
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Places Grid -->
+  <div class="places-grid">
+    {% for place in places %}
+      <div class="place-card">
+        <div class="card shadow-sm h-100 place-card-hover">
+          {% if place.image %}
+            <div class="card-image-container">
+              <img src="{{ place.image.url }}" class="card-img-top" alt="{{ place.title }}">
+            </div>
+          {% else %}
+            <div class="card-image-container placeholder-image">
+              <i class="bi bi-image"></i>
+            </div>
+          {% endif %}
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="card-title mb-0">{{ place.title }}</h5>
+              {% if place.category %}
+                <span class="badge bg-primary">{{ place.category }}</span>
+              {% endif %}
+            </div>
+            <p class="text-muted mb-3">
+              <i class="bi bi-geo-alt-fill"></i> {{ place.city }}, {{ place.state }}
+            </p>
+            <a href="{{ place.get_absolute_url }}" class="btn btn-outline-primary stretched-link">
+              View Details <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12 text-center py-5">
+        <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+        <h3 class="mt-3 text-muted">No places found</h3>
+        <p class="text-muted">Try adjusting your search criteria</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin-bottom: 0;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  opacity: 0.95;
+}
+
+.search-section {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.search-form .form-floating label {
+  color: #6c757d;
+}
+
+.search-form .form-control, .search-form .form-select {
+  border: 2px solid #e9ecef;
+  transition: all 0.3s;
+}
+
+.search-form .form-control:focus, .search-form .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.search-form .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.search-form .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.place-card-hover {
+  transition: all 0.3s ease;
+  border: none;
+  overflow: hidden;
+}
+
+.place-card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.card-image-container {
+  overflow: hidden;
+  height: 220px;
+  background: #f8f9fa;
+  position: relative;
+}
+
+.card-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.place-card-hover:hover .card-image-container img {
+  transform: scale(1.1);
+}
+
+.placeholder-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  color: #dee2e6;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-title {
+  color: #2d3436;
+  font-weight: 600;
+}
+
+.badge {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+}
+
+.btn-outline-primary {
+  border-width: 2px;
+  transition: all 0.3s;
+}
+
+.btn-outline-primary:hover {
+  transform: translateX(5px);
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .search-section {
+    padding: 1.5rem 1rem;
+  }
+  
+  .places-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
