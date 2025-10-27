@@ -9,11 +9,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 # ALLOWED_HOSTS configuration
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-# For production on Render - add your domain
-if os.getenv('ALLOWED_HOSTS'):
-    allowed = os.getenv('ALLOWED_HOSTS').split(',')
-    ALLOWED_HOSTS.extend([host.strip() for host in allowed])
+# Default to allow all hosts for Render (you can restrict later)
+ALLOWED_HOSTS = ['*']
 
 # Applications
 INSTALLED_APPS = [
