@@ -22,8 +22,8 @@ A modern Django web application for exploring and discovering amazing tourist de
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/tourist-places-explorer.git
-   cd tourist-places-explorer
+   git clone https://github.com/NafisaAlhaj17/tourist_places_explorer.git
+   cd tourist_places_explorer
    ```
 
 2. **Create a virtual environment**
