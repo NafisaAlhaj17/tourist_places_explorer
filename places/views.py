@@ -6,8 +6,7 @@ from .models import Place, Category, Feedback
 from .forms import PlaceSearchForm, FeedbackForm
 
 
-# Only logged-in users can view the list of places
-@login_required(login_url='/users/signup/')
+# ✅ Publicly visible homepage (place list)
 def place_list(request):
     form = PlaceSearchForm(request.GET or None)
     qs = Place.objects.all().select_related('category')
@@ -32,7 +31,7 @@ def place_list(request):
     })
 
 
-# Only logged-in users can view place details and give feedback
+# ✅ Only logged-in users can view place details and give feedback
 @login_required(login_url='/users/signup/')
 def place_detail(request, slug):
     place = get_object_or_404(Place, slug=slug)
@@ -48,7 +47,7 @@ def place_detail(request, slug):
             feedback.user = request.user
             feedback.approved = True
             feedback.save()
-            messages.success(request, 'Thank you for your feedback!')
+            messages.success(request, '✅ Thank you for your feedback!')
             return redirect('places:place_detail', slug=place.slug)
     else:
         form = FeedbackForm()
