@@ -1,18 +1,17 @@
 import os
 from pathlib import Path
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY: set via env on Render, fallback for local development
+# SECURITY
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
-
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-# ALLOWED_HOSTS configuration
-# Default to allow all hosts for Render (you can restrict later)
+# Allow Render + localhost
 ALLOWED_HOSTS = ['*']
 
-# Applications
+# Apps
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -26,9 +25,10 @@ INSTALLED_APPS = [
     'core',
 ]
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # serve static
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -39,6 +39,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'tourist_places_explorer.urls'
 
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -58,7 +59,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'tourist_places_explorer.wsgi.application'
 ASGI_APPLICATION = 'tourist_places_explorer.asgi.application'
 
-# Database - SQLite for easy Render deployment
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -66,15 +67,11 @@ DATABASES = {
     }
 }
 
-# Render deployment: use PostgreSQL if DATABASE_URL is set
-try:
-    import dj_database_url
-    if 'DATABASE_URL' in os.environ:
-        DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-except ImportError:
-    pass  # dj_database_url not installed, use default SQLite
+# Use PostgreSQL on Render automatically
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-# Password validation (default)
+# Password Validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -82,27 +79,29 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Language and Timezone
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# Static and Media
+# ✅ Static and Media Configuration
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic on Render
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
-# WhiteNoise static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# WhiteNoise for static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Default field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Login URLs
+# Login redirects
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Email (development) - console backend. Configure for production via envs.
+# Email backend (console for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
