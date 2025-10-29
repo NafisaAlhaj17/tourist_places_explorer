@@ -4,6 +4,7 @@ from .forms import PlaceSearchForm, FeedbackForm
 from django.db.models import Q
 from django.contrib import messages
 
+
 def place_list(request):
     form = PlaceSearchForm(request.GET or None)
     qs = Place.objects.all().select_related('category')
@@ -12,6 +13,7 @@ def place_list(request):
         q = form.cleaned_data.get('q')
         city = form.cleaned_data.get('city')
         category = form.cleaned_data.get('category')
+
         if q:
             qs = qs.filter(Q(title__icontains=q) | Q(description__icontains=q))
         if city:
@@ -20,27 +22,33 @@ def place_list(request):
             qs = qs.filter(category__name__icontains=category)
 
     categories = Category.objects.all()
-    return render(request, 'places/place_list.html', {'places': qs, 'form': form, 'categories': categories})
+    return render(request, 'places/place_list.html', {
+        'places': qs,
+        'form': form,
+        'categories': categories
+    })
+
 
 def place_detail(request, slug):
     place = get_object_or_404(Place, slug=slug)
-    feedbacks = Feedback.objects.filter(place=place, approved=True)
+    feedbacks = place.feedbacks.filter(approved=True)
     average_rating = place.get_average_rating()
     rating_count = place.get_rating_count()
-    
+
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
         if form.is_valid():
             feedback = form.save(commit=False)
             feedback.place = place
-            # Auto-approve for now, admin can moderate later
+            if request.user.is_authenticated:
+                feedback.user = request.user
             feedback.approved = True
             feedback.save()
-            messages.success(request, 'Thank you for your feedback!')
+            messages.success(request, '✅ Thank you for your feedback!')
             return redirect('places:place_detail', slug=place.slug)
     else:
         form = FeedbackForm()
-    
+
     context = {
         'place': place,
         'feedback_form': form,
