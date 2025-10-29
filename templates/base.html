@@ -13,33 +13,47 @@
       padding-top: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    
+
     .navbar {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
     }
-    
+
     .navbar-brand {
       font-size: 1.5rem;
     }
-    
+
     .nav-link {
       transition: color 0.3s;
     }
-    
+
     .nav-link:hover {
       color: #fff !important;
       transform: translateY(-2px);
     }
-    
+
     main {
       min-height: calc(100vh - 200px);
     }
-    
+
     footer {
       background: #2d3436;
       color: white;
       padding: 2rem 0;
       margin-top: 4rem;
+    }
+
+    /* Remove default button styling for logout */
+    form.d-inline button.nav-link {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    form.d-inline button.nav-link:hover {
+      color: #fff !important;
+      transform: translateY(-2px);
     }
   </style>
 </head>
@@ -66,9 +80,12 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:logout' %}">
-              <i class="bi bi-box-arrow-right"></i> Logout
-            </a>
+            <form action="{% url 'users:logout' %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="nav-link btn btn-link text-decoration-none">
+                <i class="bi bi-box-arrow-right"></i> Logout
+              </button>
+            </form>
           </li>
         {% else %}
           <li class="nav-item">
