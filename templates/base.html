@@ -23,11 +23,27 @@
     }
 
     .nav-link {
-      transition: color 0.3s;
+      color: #f8f9fa !important;
+      transition: all 0.3s ease;
+      font-weight: 500;
     }
 
     .nav-link:hover {
       color: #fff !important;
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .btn-logout {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      border-radius: 25px;
+      padding: 5px 15px;
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    .navbar-nav .btn-logout:hover {
+      background: rgba(255,255,255,0.3);
       transform: translateY(-2px);
     }
 
@@ -41,24 +57,10 @@
       padding: 2rem 0;
       margin-top: 4rem;
     }
-
-    /* Remove default button styling for logout */
-    form.d-inline button.nav-link {
-      background: none;
-      border: none;
-      color: inherit;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    form.d-inline button.nav-link:hover {
-      color: #fff !important;
-      transform: translateY(-2px);
-    }
   </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
   <div class="container">
     <a class="navbar-brand fw-bold" href="{% url 'places:place_list' %}">
       <i class="bi bi-globe"></i> TouristPlaces
@@ -66,45 +68,43 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'places:place_list' %}">
+            <i class="bi bi-house"></i> Home
+          </a>
+        </li>
+
         {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'places:place_list' %}">
-              <i class="bi bi-house"></i> Home
-            </a>
-          </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
               <i class="bi bi-person-circle"></i> {{ user.username }}
             </a>
           </li>
           <li class="nav-item">
-            <form action="{% url 'users:logout' %}" method="post" class="d-inline">
+            <form action="{% url 'users:logout' %}" method="post" class="d-inline m-0">
               {% csrf_token %}
-              <button type="submit" class="nav-link btn btn-link text-decoration-none">
+              <button type="submit" class="btn btn-logout">
                 <i class="bi bi-box-arrow-right"></i> Logout
               </button>
             </form>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'places:place_list' %}">
-              <i class="bi bi-house"></i> Home
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="{% url 'users:login' %}">
               <i class="bi bi-box-arrow-in-right"></i> Login
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-outline-light ms-2 px-3" href="{% url 'users:signup' %}">
+          <li class="nav-item ms-2">
+            <a class="btn btn-outline-light px-3 py-1" href="{% url 'users:signup' %}">
               <i class="bi bi-person-plus"></i> Sign Up
             </a>
           </li>
         {% endif %}
-        <li class="nav-item">
+
+        <li class="nav-item ms-2">
           <a class="nav-link" href="{% url 'contact:contact' %}">
             <i class="bi bi-envelope"></i> Contact
           </a>
