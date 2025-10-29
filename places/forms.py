@@ -1,10 +1,12 @@
 from django import forms
 from .models import Place, Feedback
 
+
 class PlaceSearchForm(forms.Form):
     q = forms.CharField(label='Search', required=False)
     city = forms.CharField(label='City', required=False)
     category = forms.CharField(label='Category', required=False)
+
 
 class FeedbackForm(forms.ModelForm):
     RATING_CHOICES = [
@@ -14,7 +16,7 @@ class FeedbackForm(forms.ModelForm):
         (2, '⭐⭐ Fair'),
         (1, '⭐ Poor'),
     ]
-    
+
     rating = forms.ChoiceField(
         choices=RATING_CHOICES,
         widget=forms.RadioSelect(attrs={'class': 'rating-radio'}),
@@ -33,7 +35,7 @@ class FeedbackForm(forms.ModelForm):
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Share your experience about this place...'}),
         label='Your Feedback'
     )
-    
+
     class Meta:
         model = Feedback
         fields = ['name', 'email', 'rating', 'comment']
