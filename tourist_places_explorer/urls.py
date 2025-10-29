@@ -8,6 +8,8 @@ urlpatterns = [
     path('', include('places.urls')),
     path('users/', include('users.urls')),
     path('contact/', include('contact.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+
 ]
 
 # ✅ Serve media files in development
