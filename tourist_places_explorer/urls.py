@@ -5,21 +5,21 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    #  Redirect home page to the places list (main home)
+    #  Redirect the home page to the main places list
     path('', RedirectView.as_view(pattern_name='places:place_list', permanent=False)),
 
-    # Admin panel
+    # ⚙️ Admin panel
     path('admin/', admin.site.urls),
 
-    # App routes
-    path('places/', include('places.urls')),          # Home and place-related pages
-    path('users/', include('users.urls')),            # Custom user features (signup/login/logout)
-    path('contact/', include('contact.urls')),        # Contact page
+    #  App routes
+    path('places/', include('places.urls')),      # Tourist places pages
+    path('users/', include('users.urls')),        # User signup/login/logout
+    path('contact/', include('contact.urls')),    # Contact form
 
-    # Django built-in authentication (login, logout, password reset)
+    # 🔐 Django built-in authentication
     path('accounts/', include('django.contrib.auth.urls')),
 ]
 
-#  Serve media files in development mode
+#  Serve uploaded media files (only in development)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
