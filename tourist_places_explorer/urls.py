@@ -7,7 +7,8 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     #  Redirect the home page to the main places list
-    path('', RedirectView.as_view(pattern_name='places:place_list', permanent=False)),
+    path('', RedirectView.as_view(url='/places/', permanent=False)),
+
 
     # ⚙️ Admin panel
     path('admin/', admin.site.urls),
