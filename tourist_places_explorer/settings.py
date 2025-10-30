@@ -1,9 +1,13 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv  # ✅ for .env support
 import dj_database_url
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+
+# ✅ Load environment variables from .env
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +31,7 @@ INSTALLED_APPS = [
     'contact',
     'core',
 
-    # Cloudinary
+    # ✅ Cloudinary apps
     'cloudinary',
     'cloudinary_storage',
 ]
@@ -35,7 +39,7 @@ INSTALLED_APPS = [
 # Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -74,7 +78,7 @@ DATABASES = {
     }
 }
 
-# Use PostgreSQL on Render automatically
+# ✅ Use PostgreSQL on Render automatically if available
 if 'DATABASE_URL' in os.environ:
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
@@ -113,7 +117,7 @@ LOGOUT_REDIRECT_URL = '/'
 # Email backend (console for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# ✅ Cloudinary Configuration
+# ✅ Cloudinary Configuration (loads from .env)
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
