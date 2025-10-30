@@ -115,7 +115,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # ✅ Cloudinary Configuration
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'root',
+    'CLOUD_NAME': 'dx0ztvkf0',
     'API_KEY': '774591288421459',
     'API_SECRET': 'q79wwar_Df-KuVHwn8myPqejbN8',
 }
