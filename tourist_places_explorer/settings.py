@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv  # ✅ for .env support
+from dotenv import load_dotenv  # ✅ Load environment variables from .env
 import dj_database_url
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-# ✅ Load environment variables from .env
+# ✅ Load .env file
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -70,7 +70,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'tourist_places_explorer.wsgi.application'
 ASGI_APPLICATION = 'tourist_places_explorer.asgi.application'
 
-# Database
+# ✅ Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -78,11 +78,11 @@ DATABASES = {
     }
 }
 
-# ✅ Use PostgreSQL on Render automatically if available
+# Use PostgreSQL on Render if DATABASE_URL is present
 if 'DATABASE_URL' in os.environ:
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-# Password Validation
+# ✅ Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -90,13 +90,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Language and Timezone
+# ✅ Language and Timezone
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# ✅ Static and Media Configuration
+# ✅ Static & Media Files
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
@@ -104,20 +104,26 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# WhiteNoise for static files
+# ✅ WhiteNoise for static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Default field type
+# ✅ Default field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Login redirects
+# ✅ Login redirects
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Email backend (console for development)
+# ✅ Email backend (for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# ✅ Cloudinary Configuration (loads from .env)
+# ✅ Cloudinary Configuration
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET'),
+)
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
