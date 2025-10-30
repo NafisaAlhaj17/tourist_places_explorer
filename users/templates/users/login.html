@@ -1,11 +1,38 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Login | Tourist Places Explorer{% endblock %}
 {% block content %}
-<div class="container mt-4">
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-primary">Login</button>
-  </form>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg border-0 rounded-4" style="width: 400px;">
+    <div class="card-body p-4">
+      <h3 class="text-center mb-4" style="color: #5a67d8;">
+        <i class="bi bi-box-arrow-in-right"></i> Login
+      </h3>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="id_username" class="form-label fw-semibold">Username</label>
+          {{ form.username }}
+        </div>
+
+        <div class="mb-3">
+          <label for="id_password" class="form-label fw-semibold">Password</label>
+          {{ form.password }}
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary btn-lg rounded-3">Login</button>
+        </div>
+      </form>
+
+      <div class="text-center mt-3">
+        <small class="text-muted">
+          Don’t have an account? <a href="{% url 'users:signup' %}" class="text-decoration-none">Sign up</a>
+        </small>
+      </div>
+    </div>
+  </div>
 </div>
+
 {% endblock %}
