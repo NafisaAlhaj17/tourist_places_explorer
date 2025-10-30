@@ -1,6 +1,9 @@
 import os
 from pathlib import Path
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,6 +26,10 @@ INSTALLED_APPS = [
     'users',
     'contact',
     'core',
+
+    # Cloudinary apps
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 # Middleware
@@ -105,3 +112,12 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Email backend (console for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# ✅ Cloudinary Configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'root',
+    'API_KEY': '774591288421459',
+    'API_SECRET': 'q79wwar_Df-KuVHwn8myPqejbN8',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
